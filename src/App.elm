@@ -4,6 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import SpotifyDecoder as D
 
 
 main =
@@ -47,32 +48,21 @@ init =
 
 
 type Msg
-    = Add String
+    = Add Music
     | Save String
 
 
 update : Msg -> Model -> Model
 update msg m =
     case msg of
-        Add name ->
-            { m | musics = { name = name, artist = "", album = "", duration = 0 } :: m.musics }
+        Add music ->
+            { m | musics = music :: m.musics }
 
         Save input ->
             { m | input = input }
 
 
 
---     case msg of
---         Clear ->
---             ""
---         Concat st ->
---             m ++ " " ++ st
---         Prepend st ->
---             st ++ " " ++ m
---         Replace st ->
---             st
---         NoOp ->
---             m
 -- VIEW --------------------------------------------------
 
 
@@ -81,7 +71,7 @@ view m =
     div []
         [ showPlaylist m.musics
         , input [ placeholder "Type here", onInput Save ] []
-        , button [ onClick (Add m.input) ] [ text "Add Music" ]
+        , button [ onClick (Add D.decode) ] [ text "Add Music" ]
         ]
 
 
