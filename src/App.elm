@@ -27,14 +27,19 @@ type alias Music =
 
 
 type alias Model =
-    List Music
+    { musics : List Music
+    , input : String
+    }
 
 
 init : Model
 init =
-    [ { name = "Music 1", artist = "", album = "", duration = 0 }
-    , { name = "Music 2", artist = "", album = "", duration = 0 }
-    ]
+    { musics =
+        [ { name = "Music 1", artist = "", album = "", duration = 0 }
+        , { name = "Music 2", artist = "", album = "", duration = 0 }
+        ]
+    , input = ""
+    }
 
 
 
@@ -42,14 +47,18 @@ init =
 
 
 type Msg
-    = Add Music
+    = Add String
+    | Save String
 
 
 update : Msg -> Model -> Model
 update msg m =
     case msg of
-        Add music ->
-            music :: m
+        Add name ->
+            { m | musics = { name = name, artist = "", album = "", duration = 0 } :: m.musics }
+
+        Save input ->
+            { m | input = input }
 
 
 
@@ -70,7 +79,10 @@ update msg m =
 view : Model -> Html Msg
 view m =
     div []
-        [ showPlaylist m ]
+        [ showPlaylist m.musics
+        , input [ placeholder "Type here", onInput Save ] []
+        , button [ onClick (Add m.input) ] [ text "Add Music" ]
+        ]
 
 
 showPlaylist : List Music -> Html Msg
