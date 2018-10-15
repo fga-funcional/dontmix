@@ -95,6 +95,16 @@ example =
 """
 
 
+nameDecoder : D.Decoder String
+nameDecoder =
+    D.field "name" D.string
+
+
+albumDecoder : D.Decoder String
+albumDecoder =
+    D.at [ "album", "name" ] D.string
+
+
 musicDecoder : D.Decoder Music
 musicDecoder =
     D.map4 Music
