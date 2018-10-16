@@ -104,6 +104,13 @@ albumDecoder : D.Decoder String
 albumDecoder =
     D.at [ "album", "name" ] D.string
 
+artistDecoder : D.Decoder String
+artistDecoder =
+    D.field "artists" (D.index 0 (D.field "name" D.string))
+
+durationDecoder : D.Decoder Int
+durationDecoder =
+    D.field "duration_ms" D.int
 
 musicDecoder : D.Decoder Music
 musicDecoder =
