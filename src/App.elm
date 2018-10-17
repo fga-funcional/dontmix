@@ -48,15 +48,15 @@ init =
 
 
 type Msg
-    = Add Music
+    = Add (List Music)
     | Save String
 
 
 update : Msg -> Model -> Model
 update msg m =
     case msg of
-        Add music ->
-            { m | musics = music :: m.musics }
+        Add musics ->
+            { m | musics = musics ++ m.musics }
 
         Save input ->
             { m | input = input }
@@ -79,7 +79,14 @@ showPlaylist : List Music -> Html Msg
 showPlaylist playlist =
     let
         showMusic music =
-            li [] [ h1 [] [ text music.name ] ]
+            li []
+                [ h1 []
+                    [ text music.name
+                    , text music.artist
+                    , text music.album
+                    , text (String.fromInt music.duration)
+                    ]
+                ]
 
         musics =
             List.map showMusic playlist
