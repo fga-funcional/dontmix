@@ -84,19 +84,22 @@ update msg m =
                     ( { m | searchedMusics = searchedMusics }, Cmd.none )
 
                 Err _ ->
-                    ( {m | searchedMusics = []}
+                    ( { m | searchedMusics = [] }
                     , Cmd.none
                     )
 
 
-
 -- VIEW --------------------------------------------------
+
+olAttributes =
+    [ style "max-height" "150px", style "overflow" "scroll" ] 
 
 
 view : Model -> Html Msg
 view m =
     div []
-        [ showSavedMusics m.musics
+        [ h1 [] [ text "dontmix" ]
+        , showSavedMusics m.musics
         , input [ placeholder "Type here", onInput Save ] []
         , button [ onClick <| Search ] [ text "Search Music" ]
         , showPlaylist m.searchedMusics
@@ -108,12 +111,14 @@ showPlaylist playlist =
     let
         showMusic music =
             li [ onClick <| Add [ music ], style "cursor" "pointer" ]
-                [ h1 []
-                    [ text music.name
-                    , text music.artist
-                    , text music.album
-                    , text (String.fromInt music.duration)
-                    ]
+                [ p []
+                    [ b [] [ text "Song: " ], text music.name ]
+                , p []
+                    [ b [] [ text "Artist: " ], text music.artist ]
+                , p []
+                    [ b [] [ text "Album: " ], text music.album ]
+                , p []
+                    [ b [] [ text "Duration (ms): " ], text (String.fromInt music.duration) ]
                 ]
 
         musics =
@@ -128,19 +133,19 @@ showSavedMusics playlist =
         showMusic music =
             li []
                 [ p []
-                    [ b [] [text "Song: "] ,text music.name ]
+                    [ b [] [ text "Song: " ], text music.name ]
                 , p []
-                    [ b [] [text "Artist: "] , text music.artist ]
+                    [ b [] [ text "Artist: " ], text music.artist ]
                 , p []
-                    [  b [] [text "Album: "] , text music.album ]
+                    [ b [] [ text "Album: " ], text music.album ]
                 , p []
-                    [  b [] [text "Duration (ms): "] , text (String.fromInt music.duration) ]
+                    [ b [] [ text "Duration (ms): " ], text (String.fromInt music.duration) ]
                 ]
 
         musics =
             List.map showMusic playlist
     in
-    ol [] musics
+    ol olAttributes musics
 
 
 searchMusic : String -> Cmd Msg
