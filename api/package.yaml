@@ -22,6 +22,11 @@ description:         Please see the README on GitHub at <https://github.com/gith
 dependencies:
 - base >= 4.7 && < 5
 - scotty
+- wreq
+- lens
+- aeson
+- lens-aeson
+- text
 
 library:
   source-dirs: src
