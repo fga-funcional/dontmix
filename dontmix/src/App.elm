@@ -161,26 +161,7 @@ searchMusic query =
 
 searchRequest : String -> Http.Request (List Music)
 searchRequest query =
-    let
-        headers =
-            [ Http.header "Authorization" "Bearer BQDLepposfB1aTQFbrfYXpuMAObzMklXLJ-B-qB2FyDco6MddwmeU6mGBm_q4zrgLafNknc3wZwFxuQxy2Naviul1QWV7EdeOofBrP0H01chMbOltMqAx2pyrbf0oUcQ_bY5SCAhm6WtAlxN01Q"
-            , Http.header "Accept" "application/json"
-            , Http.header "Content-Type" "application/json"
-            ]
-
-        url =
-            "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
-    in
-    Http.request
-        { method = "GET"
-        , headers = headers
-        , url = url
-        , body = Http.emptyBody
-        , expect = Http.expectJson D.musicsDecoder
-        , timeout = Nothing
-        , withCredentials = False
-        }
-
+    Http.get ("localhost:3000/search/" ++ query) D.musicsDecoder
 
 
 -- CSS --------------------------------------------------
