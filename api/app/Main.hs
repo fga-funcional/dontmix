@@ -10,24 +10,26 @@ import Data.Aeson (toJSON)
 import Data.Aeson.Lens (_String, key, nth)
 import Data.Text
 import Data.Text.Encoding
--- import Data.ByteString.Char8 as BS
+import Data.Text.Lazy.Encoding as E
+
 
 main :: IO ()
-main = scotty 3000 $
+main = scotty 3000 $ do
     S.get "/search/:query" $ do
         query <- S.param "query"
+        getMusic query
         
-        text $ (fmap (Data.Text.Encoding.decodeUtf8)  (getMusic query))
-
 
 -- getMusic :: [Char] -> IO (ByteString) 
-getMusic query = 
-    do
-        let url =  "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
-        let opts = defaults & W.header "Authorization" .~ ["Bearer BQBTXcbp9gptikt3q9lHiI36oZUQUQwb3geIj4h0ECoOuCHuxJp73WiLQEFri7YOyzYvRMwyEGjbRo7XDDFERHjUgRFMvArJ4uwApdFXLoa-2lvfWq6kZMCcMzOJarKKq_rhWE_YXeNXdS6XG64"]
-        
-        r <- W.getWith opts url
-        -- r <- getWith opts url
-        return $ (r ^. responseBody) 
+getMusic query = do
+    let url =  "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
+    let opts = defaults & W.header "Authorization" .~ ["Bearer BQCh-TpOdTq6jDgPFPplFQVixacwRRXob4A5jK56kfg1kWCSggOCKlykzpd9mMqPnDgP0-MZXUgDogyuwUQDBov9x4LKnxyxPcFEQ362aOWVqJaODzO1PUO3aHHFOPMeCV9u7HaMsNUEcrCSGnA"]
+    
+    r <-  liftIO $ W.getWith opts url
+    -- r <- getWith opts url
+    raw  (r ^. responseBody) 
 
-
+-- IO (Text)
+-- convertByteStringToText query = do
+--     converted <- fmap (E.decodeUtf8)  (getMusic query)
+--     return converted
