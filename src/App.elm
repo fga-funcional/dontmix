@@ -89,20 +89,20 @@ update msg m =
                     )
 
 
--- VIEW --------------------------------------------------
 
-olAttributes =
-    [ style "max-height" "150px", style "overflow" "scroll" ] 
+-- VIEW --------------------------------------------------
 
 
 view : Model -> Html Msg
 view m =
     div []
-        [ h1 [] [ text "dontmix" ]
-        , showSavedMusics m.musics
+        [ h1 [] [ text "Dontmix" ]
         , input [ placeholder "Type here", onInput Save ] []
         , button [ onClick <| Search ] [ text "Search Music" ]
-        , showPlaylist m.searchedMusics
+        , div [ style "display" "flex" ]
+            [ showPlaylist m.searchedMusics
+            , showSavedMusics m.musics
+            ]
         ]
 
 
@@ -110,7 +110,7 @@ showPlaylist : List Music -> Html Msg
 showPlaylist playlist =
     let
         showMusic music =
-            li [ onClick <| Add [ music ], style "cursor" "pointer" ]
+            li ([ onClick <| Add [ music ], style "cursor" "pointer" ] ++ liAttributes)
                 [ p []
                     [ b [] [ text "Song: " ], text music.name ]
                 , p []
@@ -124,14 +124,17 @@ showPlaylist playlist =
         musics =
             List.map showMusic playlist
     in
-    ul [] musics
+    div []
+        [ h2 [] [ text "Search Results" ]
+        , ul (musicListAttributes ++ [ style "list-style" "none", style "padding" "0" ]) musics
+        ]
 
 
 showSavedMusics : List Music -> Html Msg
 showSavedMusics playlist =
     let
         showMusic music =
-            li []
+            li liAttributes
                 [ p []
                     [ b [] [ text "Song: " ], text music.name ]
                 , p []
@@ -145,7 +148,10 @@ showSavedMusics playlist =
         musics =
             List.map showMusic playlist
     in
-    ol olAttributes musics
+    div []
+        [ h2 [] [ text "My Playlist" ]
+        , ol musicListAttributes musics
+        ]
 
 
 searchMusic : String -> Cmd Msg
@@ -157,7 +163,7 @@ searchRequest : String -> Http.Request (List Music)
 searchRequest query =
     let
         headers =
-            [ Http.header "Authorization" "Bearer BQATZ5YTV6cG6158GTSOFFI2FstKEtvpfbZzMPGU1EVKX1yr0VJARB62rp0NwqY4hn9aAn7wYA1v4vYKt2pXSZoQAOZI3XaCqkYvE07um88eK4z14yScxuvrC_t10eyKlKIGnUXCXeTPAc6X2sM"
+            [ Http.header "Authorization" "Bearer BQDLepposfB1aTQFbrfYXpuMAObzMklXLJ-B-qB2FyDco6MddwmeU6mGBm_q4zrgLafNknc3wZwFxuQxy2Naviul1QWV7EdeOofBrP0H01chMbOltMqAx2pyrbf0oUcQ_bY5SCAhm6WtAlxN01Q"
             , Http.header "Accept" "application/json"
             , Http.header "Content-Type" "application/json"
             ]
@@ -174,3 +180,18 @@ searchRequest query =
         , timeout = Nothing
         , withCredentials = False
         }
+
+
+
+-- CSS --------------------------------------------------
+
+
+liAttributes =
+    [ style "padding" "5px", style "border-bottom" "1px solid grey" ]
+
+
+musicListAttributes =
+    [ style "max-height" "450px"
+    , style "overflow-y" "scroll"
+    , style "min-width" "300px"
+    ]
