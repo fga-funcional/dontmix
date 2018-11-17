@@ -161,25 +161,26 @@ searchMusic query =
 
 searchRequest : String -> Http.Request (List Music)
 searchRequest query =
-    let
-        headers =
-            [ Http.header "Authorization" "Bearer BQDLepposfB1aTQFbrfYXpuMAObzMklXLJ-B-qB2FyDco6MddwmeU6mGBm_q4zrgLafNknc3wZwFxuQxy2Naviul1QWV7EdeOofBrP0H01chMbOltMqAx2pyrbf0oUcQ_bY5SCAhm6WtAlxN01Q"
-            , Http.header "Accept" "application/json"
-            , Http.header "Content-Type" "application/json"
-            ]
+    -- let
+    --     headers =
+    --         [ Http.header "Authorization" "Bearer BQAEQhFzboT5A5Gdc0lExBQZPGaU7M_IX5pSbbPh4ynkhUd0HdPxSxACwedJgz7mtZ33JV7QtHlAmNyan9V9MHqpzY4gHOrfzuJ26mQTcMsw-4e-DWSxcTlN7o7gxC9eVe_3paXBBdvtw1qSyWw"
+    --         , Http.header "Accept" "application/json"
+    --         , Http.header "Content-Type" "application/json"
+    --         ]
 
-        url =
-            "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
-    in
-    Http.request
-        { method = "GET"
-        , headers = headers
-        , url = url
-        , body = Http.emptyBody
-        , expect = Http.expectJson D.musicsDecoder
-        , timeout = Nothing
-        , withCredentials = False
-        }
+    --     url =
+    --         "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
+    -- in
+    -- Http.request
+    --     { method = "GET"
+    --     , headers = headers
+    --     , url = url
+    --     , body = Http.emptyBody
+    --     , expect = Http.expectJson D.musicsDecoder
+    --     , timeout = Nothing
+    --     , withCredentials = False
+    --     }
+    Http.get ("http://localhost:3000/search/" ++ query) D.musicsDecoder
 
 
 

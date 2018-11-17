@@ -27,6 +27,7 @@ dependencies:
 - aeson
 - lens-aeson
 - text
+- wai-cors
 
 library:
   source-dirs: src
