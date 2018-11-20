@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="./assets/dontmix.png"></img>
+  <img src="./dontmix/assets/dontmix.png"></img>
 </p>
