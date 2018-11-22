@@ -14,6 +14,8 @@ type Msg
     | Save String
     | SaveSearchedMusic (Result Http.Error (List Music))
     | Search
+    | RecommendMusics
+    | SaveRecommendMusics (Result Http.Error (List Music))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -28,6 +30,9 @@ update msg m =
         Search ->
             ( m, searchMusic m.input )
 
+        RecommendMusics ->
+            ( m, recommendMusics m.musics )
+
         SaveSearchedMusic result ->
             case result of
                 Ok searchedMusics ->
@@ -38,30 +43,41 @@ update msg m =
                     , Cmd.none
                     )
 
+        SaveRecommendMusics result ->
+            case result of
+                Ok recommendedMusics ->
+                    ( { m | recommendedMusics = recommendedMusics }, Cmd.none )
+
+                Err _ ->
+                    ( { m | recommendedMusics = [] }
+                    , Cmd.none
+                    )
+
 
 searchMusic : String -> Cmd Msg
 searchMusic query =
     Http.send SaveSearchedMusic (searchRequest query)
 
 
+recommendMusics : List Music -> Cmd Msg
+recommendMusics selectedMusics =
+    Http.send SaveRecommendMusics (recommendationRequest (List.map getMusicId selectedMusics))
+
+
 searchRequest : String -> Http.Request (List Music)
 searchRequest query =
-    -- let
-    --     headers =
-    --         [ Http.header "Authorization" "Bearer BQAEQhFzboT5A5Gdc0lExBQZPGaU7M_IX5pSbbPh4ynkhUd0HdPxSxACwedJgz7mtZ33JV7QtHlAmNyan9V9MHqpzY4gHOrfzuJ26mQTcMsw-4e-DWSxcTlN7o7gxC9eVe_3paXBBdvtw1qSyWw"
-    --         , Http.header "Accept" "application/json"
-    --         , Http.header "Content-Type" "application/json"
-    --         ]
-    --     url =
-    --         "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
-    -- in
-    -- Http.request
-    --     { method = "GET"
-    --     , headers = headers
-    --     , url = url
-    --     , body = Http.emptyBody
-    --     , expect = Http.expectJson D.musicsDecoder
-    --     , timeout = Nothing
-    --     , withCredentials = False
-    --     }
-    Http.get ("http://localhost:3000/search/" ++ query) D.musicsDecoder
+    Http.get ("http://localhost:3000/search/" ++ query) D.searchedMusicsDecoder
+
+
+recommendationRequest : List String -> Http.Request (List Music)
+recommendationRequest query =
+    let
+        seed =
+            String.join "%2C" query
+    in
+    Http.get ("http://localhost:3000/recommendation/" ++ seed) D.recommendedMusicsDecoder
+
+
+getMusicId : Music -> String
+getMusicId music =
+    music.name

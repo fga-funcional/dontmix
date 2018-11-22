@@ -1,4 +1,4 @@
-module SpotifyDecoder exposing (Music, decode, musicsDecoder)
+module SpotifyDecoder exposing (Music, recommendedMusicsDecoder, searchedMusicsDecoder)
 
 import Json.Decode as D
 
@@ -44,19 +44,11 @@ musicDecoder =
         durationDecoder
 
 
-musicsDecoder : D.Decoder Musics
-musicsDecoder =
+searchedMusicsDecoder : D.Decoder Musics
+searchedMusicsDecoder =
     D.at [ "tracks", "items" ] (D.list musicDecoder)
 
-decode : String -> List Music
-decode example =
-    let
-        decodeHelp =
-            D.decodeString musicsDecoder example
-    in
-    case decodeHelp of
-        Ok m ->
-            m
 
-        Err _ ->
-            []
+recommendedMusicsDecoder : D.Decoder Musics
+recommendedMusicsDecoder =
+    D.field "tracks" (D.list musicDecoder)

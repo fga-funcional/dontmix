@@ -17,9 +17,11 @@ view m =
         [ h1 [] [ text "Dontmix" ]
         , input [ placeholder "Type here", onInput Save ] []
         , button [ onClick <| Search ] [ text "Search Music" ]
+        , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
         , div [ style "display" "flex" ]
             [ showPlaylist m.searchedMusics
             , showSavedMusics m.musics
+            , showSavedMusics m.recommendedMusics
             ]
         ]
 
@@ -53,7 +55,7 @@ showMusic clickable music =
     let
         attrs =
             if clickable then
-                 (onClick <| Add [ music ]) :: style "cursor" "pointer" :: liAttributes
+                (onClick <| Add [ music ]) :: style "cursor" "pointer" :: liAttributes
 
             else
                 liAttributes

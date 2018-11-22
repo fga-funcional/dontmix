@@ -15,6 +15,7 @@ type alias Model =
     { musics : List Music
     , input : String
     , searchedMusics : List Music
+    , recommendedMusics : List Music
     }
 
 
@@ -23,6 +24,7 @@ init _ =
     ( { musics = []
       , input = ""
       , searchedMusics = []
+      , recommendedMusics = []
       }
     , Cmd.none
     )
