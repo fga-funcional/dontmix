@@ -21,21 +21,25 @@ main = scotty 3000 $ do
     middleware simpleCors    
     S.get "/search/:query" $ do
         query <- S.param "query"
-        getMusic query
+        searchMusics query
+    
+    S.get "/recommendation/:query" $ do
+        query <- S.param "query"
+        getRecommendation query
         
 
 
-
 -- getMusic :: [Char] -> IO (ByteString) 
-getMusic query = do
+searchMusics query = do
     let url =  "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
-    let opts = defaults & W.header "Authorization" .~ ["Bearer BQC5i9vENMXdKnAj3eDrVIUHkpwCBCYSnuwfLQBmrwkCFM5_83mz9aPvEnaxEFCP5SIskdTigRJkHOiu-pxJUVtFdKHaytkE0tPCxhvatITLEpCbESzymSm0xVUF4p4Oa4aQHYUqfSfe0mvEmEo"]
+    let opts = defaults & W.header "Authorization" .~ ["Bearer BQAJFHM3GQVJP4dB8QA8qZQ9rXmKwT8Wb8AE92Fq_G6Sh3I_UtOid3vn2MOKhgIMioA5VUOYqppxDHCzTLT-eb5d2U1V1ElmrZKfeA1tYulDraxwtEyW2GvzfBPjDZ4T1QM2KV4lOJBlsdwu3Ao"]
     
     r <-  liftIO $ W.getWith opts url
-    -- r <- getWith opts url
     raw  (r ^. responseBody) 
 
--- IO (Text)
--- convertByteStringToText query = do
---     converted <- fmap (E.decodeUtf8)  (getMusic query)
---     return converted
+getRecommendation query = do
+    let url =  "https://api.spotify.com/v1/recommendations?seed_tracks=" ++ query
+    let opts = defaults & W.header "Authorization" .~ ["Bearer BQAJFHM3GQVJP4dB8QA8qZQ9rXmKwT8Wb8AE92Fq_G6Sh3I_UtOid3vn2MOKhgIMioA5VUOYqppxDHCzTLT-eb5d2U1V1ElmrZKfeA1tYulDraxwtEyW2GvzfBPjDZ4T1QM2KV4lOJBlsdwu3Ao"]
+
+    r <-  liftIO $ W.getWith opts url
+    raw  (r ^. responseBody) 
