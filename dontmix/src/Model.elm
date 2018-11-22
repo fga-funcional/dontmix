@@ -4,7 +4,8 @@ module Model exposing (Model, Music, init)
 
 
 type alias Music =
-    { name : String
+    { id : String
+    , name : String
     , artist : String
     , album : String
     , duration : Int

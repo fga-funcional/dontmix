@@ -1,18 +1,16 @@
-module SpotifyDecoder exposing (Music, recommendedMusicsDecoder, searchedMusicsDecoder)
+module SpotifyDecoder exposing (recommendedMusicsDecoder, searchedMusicsDecoder)
 
 import Json.Decode as D
-
-
-type alias Music =
-    { name : String
-    , artist : String
-    , album : String
-    , duration : Int
-    }
+import Model exposing (Music)
 
 
 type alias Musics =
     List Music
+
+
+idDecoder : D.Decoder String
+idDecoder =
+    D.field "id" D.string
 
 
 nameDecoder : D.Decoder String
@@ -37,7 +35,8 @@ durationDecoder =
 
 musicDecoder : D.Decoder Music
 musicDecoder =
-    D.map4 Music
+    D.map5 Music
+        idDecoder
         nameDecoder
         artistDecoder
         albumDecoder

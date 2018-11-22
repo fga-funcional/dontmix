@@ -80,4 +80,4 @@ recommendationRequest query =
 
 getMusicId : Music -> String
 getMusicId music =
-    music.name
+    music.id
