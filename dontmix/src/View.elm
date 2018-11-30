@@ -20,8 +20,8 @@ view m =
         , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
         , div [ style "display" "flex" ]
             [ showPlaylist m.searchedMusics
-            , showSavedMusics m.musics
-            , showSavedMusics m.recommendedMusics
+            , showSavedMusics "Selected Musics" m.musics
+            , showSavedMusics "Recommended Musics" m.recommendedMusics
             ]
         ]
 
@@ -38,14 +38,14 @@ showPlaylist playlist =
         ]
 
 
-showSavedMusics : List Music -> Html Msg
-showSavedMusics playlist =
+showSavedMusics : String -> List Music -> Html Msg
+showSavedMusics header playlist =
     let
         musics =
             List.map (showMusic False) playlist
     in
     div []
-        [ h2 [] [ text "My Playlist" ]
+        [ h2 [] [ text header ]
         , ol musicListAttributes musics
         ]
 
