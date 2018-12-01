@@ -21,7 +21,7 @@ main = scotty 3000 $ do
         getRecommendation query
 
         
-searchMusics :: [Char] -> ActionM()
+searchMusics :: String -> ActionM()
 searchMusics query = do
     let url =  "https://api.spotify.com/v1/search?type=track&limit=5&q=" ++ query
 
@@ -31,7 +31,7 @@ searchMusics query = do
     r <-  liftIO $ Wreq.getWith opts url
     raw  (r ^. responseBody) 
 
-getRecommendation :: [Char] -> ActionM()
+getRecommendation :: String -> ActionM()
 getRecommendation query = do
     let url =  "https://api.spotify.com/v1/recommendations?seed_tracks=" ++ query
 

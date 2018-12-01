@@ -13,7 +13,7 @@ import Data.ByteString
 import Data.ByteString.Base64 as Base64
 import Data.ByteString.Char8 as Char8
 
-getAccessToken :: IO (ByteString)
+getAccessToken :: IO ByteString
 getAccessToken = do
     let url = "https://accounts.spotify.com/api/token"
     let raw_client_token = Base64.encode("ecb1f82367e64c61aedfc4c549c73809:b62e0ec0451c460daab6598afe3ffb74")
