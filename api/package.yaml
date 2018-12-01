@@ -28,6 +28,8 @@ dependencies:
 - lens-aeson
 - text
 - wai-cors
+- bytestring
+- base64-bytestring
 
 library:
   source-dirs: src
