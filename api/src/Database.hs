@@ -8,9 +8,9 @@ import System.Directory
 
 findOrCreatePageJSON :: FilePath -> IO String
 findOrCreatePageJSON path = do
-    let filePath = "./dontmixdb/" ++ path ++ ".json"
+    let filePath = "./db/" ++ path ++ ".json"
 
-    createDirectoryIfMissing False  "./dontmixdb/"
+    createDirectoryIfMissing False  "./db/"
     h <- openFile filePath ReadWriteMode
     raw_contents <- hGetContents h
     startJSONWithDefault filePath raw_contents
@@ -22,6 +22,6 @@ startJSONWithDefault path _ = mempty
 
 editPageJSON :: FilePath -> String -> IO String
 editPageJSON path contents = do
-    let filePath = "./dontmixdb/" ++ path ++ ".json"
+    let filePath = "./db/" ++ path ++ ".json"
     writeFile filePath contents
     return filePath
