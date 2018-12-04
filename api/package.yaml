@@ -30,6 +30,7 @@ dependencies:
 - wai-cors
 - bytestring
 - base64-bytestring
+- directory
 
 library:
   source-dirs: src
