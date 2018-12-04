@@ -7,11 +7,13 @@ import View exposing (..)
 
 
 main =
-    Browser.element
-        { view = view
+    Browser.application
+        { init = init
+        , view = view
         , update = update
         , subscriptions = subscriptions
-        , init = init
+        , onUrlChange = UrlChanged
+        , onUrlRequest = UrlRequest
         }
 
 

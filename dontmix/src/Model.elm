@@ -1,5 +1,10 @@
 module Model exposing (Model, Music, init)
 
+import Browser.Navigation as Nav
+import Url
+
+
+
 -- MODEL --------------------------------------------------
 
 
@@ -17,15 +22,19 @@ type alias Model =
     , input : String
     , searchedMusics : List Music
     , recommendedMusics : List Music
+    , url : Url.Url
+    , key : Nav.Key
     }
 
 
-init : () -> ( Model, Cmd msg )
-init _ =
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd msg )
+init _ url key =
     ( { musics = []
       , input = ""
       , searchedMusics = []
       , recommendedMusics = []
+      , url = url
+      , key = key
       }
     , Cmd.none
     )

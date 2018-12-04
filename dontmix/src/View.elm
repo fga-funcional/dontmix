@@ -1,29 +1,37 @@
 module View exposing (view)
 
+import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Model exposing (..)
 import Msg exposing (Msg(..))
+import Url
 
 
 
 -- VIEW --------------------------------------------------
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view m =
-    div []
-        [ h1 [] [ text "Dontmix" ]
-        , input [ placeholder "Type here", onInput Save ] []
-        , button [ onClick <| Search ] [ text "Search Music" ]
-        , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
-        , div [ style "display" "flex" ]
-            [ showPlaylist m.searchedMusics
-            , showSavedMusics "Selected Musics" m.musics
-            , showSavedMusics "Recommended Musics" m.recommendedMusics
+    { title = "Dontmix"
+    , body =
+        [ div []
+            [ h1 [] [ text "Dontmix" ]
+            , text "The current URL is: "
+            , b [] [ text (Url.toString m.url) ]
+            , input [ placeholder "Type here", onInput Save ] []
+            , button [ onClick <| Search ] [ text "Search Music" ]
+            , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
+            , div [ style "display" "flex" ]
+                [ showPlaylist m.searchedMusics
+                , showSavedMusics "Selected Musics" m.musics
+                , showSavedMusics "Recommended Musics" m.recommendedMusics
+                ]
             ]
         ]
+    }
 
 
 showPlaylist : List Music -> Html Msg

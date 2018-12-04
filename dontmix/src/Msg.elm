@@ -1,8 +1,13 @@
 module Msg exposing (Msg(..), update)
 
+import Browser
+import Browser.Navigation as Nav
 import Http
 import Model exposing (..)
+import Random exposing (generate)
+import Random.List exposing (shuffle)
 import SpotifyDecoder as D
+import Url
 
 
 
@@ -16,6 +21,10 @@ type Msg
     | Search
     | RecommendMusics
     | SaveRecommendMusics (Result Http.Error (List Music))
+    | ShuffledList (List Music)
+    | ShuffleIt
+    | UrlChanged Url.Url
+    | UrlRequest Browser.UrlRequest
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -53,6 +62,20 @@ update msg m =
                     , Cmd.none
                     )
 
+        ShuffleIt ->
+            ( m, generate ShuffledList (shuffle m.musics) )
+
+        ShuffledList list ->
+            ( { m | musics = list }, Cmd.none )
+
+        UrlChanged url ->
+            ( { m | url = Debug.log "HUE" url }
+            , Nav.pushUrl m.key (Url.toString url)
+            )
+
+        UrlRequest _ ->
+            ( m, Cmd.none )
+
 
 searchMusic : String -> Cmd Msg
 searchMusic query =
@@ -61,7 +84,7 @@ searchMusic query =
 
 recommendMusics : List Music -> Cmd Msg
 recommendMusics selectedMusics =
-    Http.send SaveRecommendMusics (recommendationRequest (List.map getMusicId selectedMusics))
+    Http.send SaveRecommendMusics (recommendationRequest (List.map getMusicId (List.take 5 selectedMusics)))
 
 
 searchRequest : String -> Http.Request (List Music)
