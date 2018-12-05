@@ -1,5 +1,6 @@
 module Msg exposing (Msg(..), update)
 
+import APIHandler exposing (encodeMusics)
 import Browser
 import Browser.Navigation as Nav
 import Http
@@ -80,6 +81,15 @@ update msg m =
 searchMusic : String -> Cmd Msg
 searchMusic query =
     Http.send SaveSearchedMusic (searchRequest query)
+
+
+postPage : Model -> Cmd Msg
+postPage m =
+    Http.post
+        { url = "http://localhost:3000/books"
+        , body = jsonBody (encodeMusics m)
+        , expect = Http.expectJson GotBooks (list string)
+        }
 
 
 recommendMusics : List Music -> Cmd Msg
