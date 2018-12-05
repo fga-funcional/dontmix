@@ -17,7 +17,7 @@ findOrCreatePageJSON path = do
     return filePath
     
 startJSONWithDefault :: FilePath -> String -> IO ()
-startJSONWithDefault path "" = writeFile path "{ \"Selected\": {} \"Recommended\": {} }" 
+startJSONWithDefault path "" = writeFile path "{ \"Selected\": [], \"Recommended\": [] }" 
 startJSONWithDefault path _ = mempty
 
 editPageJSON :: FilePath -> String -> IO String

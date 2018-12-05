@@ -17,7 +17,7 @@ main = scotty 3000 $ do
     
     Scotty.get "/:page"  findOrCreatePage
 
-    Scotty.put "/:page" editPage
+    Scotty.post "/:page" editPage
 
     Scotty.get "/search/:query" searchMusics
     
