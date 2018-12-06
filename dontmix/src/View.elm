@@ -18,11 +18,13 @@ view m =
     { title = "Dontmix"
     , body =
         [ div []
-            [ h1 [] [ text "Dontmix" ]
-            , input [ placeholder "Type here", onInput Save ] []
-            , button [ onClick <| Search ] [ text "Search Music" ]
-            , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
-            , div [ style "display" "flex" ]
+            [ img logoAttributes []
+            , div [ style "margin" "0 auto", style "width" "fit-content" ]
+                [ input [ placeholder "Type here", onInput Save, style "width" "300px" ] []
+                , button [ onClick <| Search, style "margin" "0 10px" ] [ text "Search Music" ]
+                , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
+                ]
+            , div [ style "display" "flex", style "height" "30vw" ]
                 [ showPlaylist m.searchedMusics
                 , showSavedMusics "Selected Musics" m.musics
                 , showSavedMusics "Recommended Musics" m.recommendedMusics
@@ -38,8 +40,8 @@ showPlaylist playlist =
         musics =
             List.map (showMusic True) playlist
     in
-    div []
-        [ h2 [] [ text "Search Results" ]
+    div [ style "width" "100%", style "margin-top" "50px" ]
+        [ h2 headerAttributes [ text "Search Results" ]
         , ul (musicListAttributes ++ [ style "list-style" "none", style "padding" "0" ]) musics
         ]
 
@@ -50,8 +52,8 @@ showSavedMusics header playlist =
         musics =
             List.map (showMusic False) playlist
     in
-    div []
-        [ h2 [] [ text header ]
+    div savedMusicsAttributes
+        [ h2 headerAttributes [ text header ]
         , ol musicListAttributes musics
         ]
 
@@ -68,13 +70,13 @@ showMusic clickable music =
     in
     li attrs
         [ p []
-            [ b [] [ text "Song: " ], text music.name ]
+            [ b [ style "color" "#620029" ] [ text "Song: " ], text music.name ]
         , p []
-            [ b [] [ text "Artist: " ], text music.artist ]
+            [ b [ style "color" "#620029" ] [ text "Artist: " ], text music.artist ]
         , p []
-            [ b [] [ text "Album: " ], text music.album ]
+            [ b [ style "color" "#620029" ] [ text "Album: " ], text music.album ]
         , p []
-            [ b [] [ text "Duration (ms): " ], text (String.fromInt music.duration) ]
+            [ b [ style "color" "#620029" ] [ text "Duration (ms): " ], text (String.fromInt music.duration) ]
         ]
 
 
@@ -87,7 +89,32 @@ liAttributes =
 
 
 musicListAttributes =
-    [ style "max-height" "450px"
+    [ style "max-height" "350px"
     , style "overflow-y" "scroll"
     , style "min-width" "300px"
+    ]
+
+
+logoAttributes =
+    [ src "../assets/dontmix-inline.png"
+    , style "display" "block"
+    , style "width" "20%"
+    , style "height" "auto"
+    , style "margin" "40px auto"
+    ]
+
+
+headerAttributes =
+    [ style "background" "-webkit-linear-gradient(#800080, #550000)"
+    , style "-webkit-background-clip" "text"
+    , style "font-size" "30px"
+    , style "-webkit-text-fill-color" "transparent"
+    , style "text-align" "center"
+    ]
+
+
+savedMusicsAttributes =
+    [ style "width" "100%"
+    , style "border-left" "1px solid #800080"
+    , style "margin-top" "50px"
     ]
