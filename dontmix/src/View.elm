@@ -19,8 +19,6 @@ view m =
     , body =
         [ div []
             [ h1 [] [ text "Dontmix" ]
-            , text "The current URL is: "
-            , b [] [ text (Url.toString m.url) ]
             , input [ placeholder "Type here", onInput Save ] []
             , button [ onClick <| Search ] [ text "Search Music" ]
             , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
