@@ -1,4 +1,4 @@
-module SpotifyDecoder exposing (recommendedMusicsDecoder, searchedMusicsDecoder)
+module SpotifyDecoder exposing (recommendedMusicsDecoder, searchedMusicsDecoder, musicDecoder, Musics)
 
 import Json.Decode as D
 import Model exposing (Music)
