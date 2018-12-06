@@ -1,6 +1,6 @@
-module Msg exposing (Msg(..), update)
+module Msg exposing (Msg(..), getPage, init, update)
 
-import APIHandler exposing (encodeMusics)
+import APIHandler exposing (Page, encodeMusics, pageDecoder)
 import Browser
 import Browser.Navigation as Nav
 import Http
@@ -15,6 +15,19 @@ import Url
 -- MESSAGES ----------------------------------------------
 
 
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
+    ( { musics = []
+      , input = ""
+      , searchedMusics = []
+      , recommendedMusics = []
+      , url = url
+      , key = key
+      }
+    , getPage url.path
+    )
+
+
 type Msg
     = Add (List Music)
     | Save String
@@ -26,6 +39,7 @@ type Msg
     | ShuffleIt
     | UrlChanged Url.Url
     | UrlRequest Browser.UrlRequest
+    | SavePage (Result Http.Error Page)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -70,12 +84,30 @@ update msg m =
             ( { m | musics = list }, Cmd.none )
 
         UrlChanged url ->
-            ( { m | url = Debug.log "HUE" url }
-            , Nav.pushUrl m.key (Url.toString url)
+            ( { m | url = url }
+            , Cmd.none
             )
 
         UrlRequest _ ->
             ( m, Cmd.none )
+
+        SavePage result ->
+            case Debug.log "HUE" result of
+                Ok page ->
+                    ( { m | recommendedMusics = page.recommended, musics = page.selected }, Cmd.none )
+
+                Err _ ->
+                    ( m, Cmd.none )
+
+
+getPage : String -> Cmd Msg
+getPage query =
+    Http.send SavePage (getPageRequest query)
+
+
+getPageRequest : String -> Http.Request Page
+getPageRequest query =
+    Http.get ("http://localhost:3000" ++ query) pageDecoder
 
 
 searchMusic : String -> Cmd Msg
@@ -83,23 +115,14 @@ searchMusic query =
     Http.send SaveSearchedMusic (searchRequest query)
 
 
-postPage : Model -> Cmd Msg
-postPage m =
-    Http.post
-        { url = "http://localhost:3000/books"
-        , body = jsonBody (encodeMusics m)
-        , expect = Http.expectJson GotBooks (list string)
-        }
+searchRequest : String -> Http.Request (List Music)
+searchRequest query =
+    Http.get ("http://localhost:3000/search/" ++ query) D.searchedMusicsDecoder
 
 
 recommendMusics : List Music -> Cmd Msg
 recommendMusics selectedMusics =
     Http.send SaveRecommendMusics (recommendationRequest (List.map getMusicId (List.take 5 selectedMusics)))
-
-
-searchRequest : String -> Http.Request (List Music)
-searchRequest query =
-    Http.get ("http://localhost:3000/search/" ++ query) D.searchedMusicsDecoder
 
 
 recommendationRequest : List String -> Http.Request (List Music)
