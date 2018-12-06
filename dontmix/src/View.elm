@@ -23,6 +23,7 @@ view m =
                 [ input [ placeholder "Type here", onInput Save, style "width" "300px" ] []
                 , button [ onClick <| Search, style "margin" "0 10px" ] [ text "Search Music" ]
                 , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
+                , button [ onClick <| SavePage ] [ text "Save Page" ]
                 ]
             , div [ style "display" "flex", style "height" "30vw" ]
                 [ showPlaylist m.searchedMusics

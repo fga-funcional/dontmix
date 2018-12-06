@@ -39,7 +39,9 @@ type Msg
     | ShuffleIt
     | UrlChanged Url.Url
     | UrlRequest Browser.UrlRequest
-    | SavePage (Result Http.Error Page)
+    | GetPage (Result Http.Error Page)
+    | SavePage
+    | Noop (Result Http.Error ())
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -91,23 +93,39 @@ update msg m =
         UrlRequest _ ->
             ( m, Cmd.none )
 
-        SavePage result ->
-            case Debug.log "HUE" result of
+        GetPage result ->
+            case result of
                 Ok page ->
                     ( { m | recommendedMusics = page.recommended, musics = page.selected }, Cmd.none )
 
                 Err _ ->
                     ( m, Cmd.none )
 
+        SavePage ->
+            ( m, savePage m )
+
+        Noop _ ->
+            ( m, Cmd.none )
+
+
+savePage : Model -> Cmd Msg
+savePage model =
+    Http.send GetPage (postPage model)
+
+
+postPage : Model -> Http.Request Page
+postPage m =
+    Http.post ("http://localhost:8080/api" ++ m.url.path) (Http.jsonBody (encodeMusics m)) pageDecoder
+
 
 getPage : String -> Cmd Msg
 getPage query =
-    Http.send SavePage (getPageRequest query)
+    Http.send GetPage (getPageRequest query)
 
 
 getPageRequest : String -> Http.Request Page
 getPageRequest query =
-    Http.get ("http://localhost:3000" ++ query) pageDecoder
+    Http.get ("http://localhost:8080/api" ++ query) pageDecoder
 
 
 searchMusic : String -> Cmd Msg
@@ -117,7 +135,7 @@ searchMusic query =
 
 searchRequest : String -> Http.Request (List Music)
 searchRequest query =
-    Http.get ("http://localhost:3000/search/" ++ query) D.searchedMusicsDecoder
+    Http.get ("http://localhost:8080/api/search/" ++ query) D.searchedMusicsDecoder
 
 
 recommendMusics : List Music -> Cmd Msg
@@ -131,7 +149,7 @@ recommendationRequest query =
         seed =
             String.join "%2C" query
     in
-    Http.get ("http://localhost:3000/recommendation/" ++ seed) D.recommendedMusicsDecoder
+    Http.get ("http://localhost:8080/api/recommendation/" ++ seed) D.recommendedMusicsDecoder
 
 
 getMusicId : Music -> String
