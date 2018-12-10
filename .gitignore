@@ -2,3 +2,8 @@
 elm-stuff
 # elm-repl generated files
 repl-temp-*
+
+dontmix/node_modules
+dontmix/package-lock.json
+dontmix/index.html
+api/db
