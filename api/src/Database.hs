@@ -4,15 +4,17 @@ module Database
     )
 where
 
-import qualified System.IO.Strict              as Strict
-import           System.Directory
+import qualified System.IO as IO
+import qualified System.IO.Strict as Strict
+import System.Directory
 
 findOrCreatePageJSON :: FilePath -> IO String
 findOrCreatePageJSON path = do
     let filePath = "./db/" ++ path ++ ".json"
 
     createDirectoryIfMissing False "./db/"
-    contents <- Strict.readFile filePath
+    h <- IO.openFile filePath IO.ReadWriteMode
+    contents <- Strict.hGetContents h
     startJSONWithDefault filePath contents
     return filePath
 
