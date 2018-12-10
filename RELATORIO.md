@@ -29,12 +29,8 @@ Não foi necessário instanciar nenhuma classe em Haskell.
 Sim. É possível pesquisar músicas, selecioná-las, gerar playlists com base na sua seleção, além de persistir todos esses dados.
 
 ### 2.2. Implementa interações de forma eficiente?
-Todas as interações são simples, como demonstradas nos GIFs à seguir:
-
-#### Pesquisa
-#### Selecionar Músicas
-#### Gerar Playlist de Sugestões
-#### Salvar Página
+Todas as interações são simples, como demonstradas no GIF à seguir:
+![](dontmix/assets/Dontmix.gif)
 
 ### 2.3. Conseguiu polir a aplicação?
 Sim. Tanto o Front-end quanto o Back-end estão bem modularizados e ambos estão seguindo padrões das linguagens (como a tipagem das funções). Ver seção 4.2.

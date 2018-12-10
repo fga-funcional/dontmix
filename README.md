@@ -17,6 +17,7 @@ allows to persist the data of a page, like dontpad.com.
 
 - Clone project with `git clone https://github.com/fga-funcional/dontmix.git`
 - On root page of the project, run `./run.sh`
+- Access the app at `localhost:8080`
 
 # Report
 
