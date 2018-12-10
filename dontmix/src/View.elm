@@ -22,7 +22,7 @@ view m =
             , div [ style "margin" "0 auto", style "width" "fit-content" ]
                 [ input [ placeholder "Type here", onInput Save, style "width" "300px" ] []
                 , button [ onClick <| Search, style "margin" "0 10px" ] [ text "Search Music" ]
-                , button [ onClick <| RecommendMusics ] [ text "Recommend Musics" ]
+                , button [ onClick <| RecommendMusics, style "margin-right" "10px" ] [ text "Recommend Musics" ]
                 , button [ onClick <| SavePage ] [ text "Save Page" ]
                 ]
             , div [ style "display" "flex", style "height" "30vw" ]
